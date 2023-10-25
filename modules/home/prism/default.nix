@@ -8,7 +8,7 @@
 in {
   options.prism = {
     enable = lib.mkEnableOption "Enable prism";
-    outputPath =  lib.mkOption {
+    outputPath = lib.mkOption {
       description = ''
         The directory the the wallpapers are outputted to.
       '';
@@ -38,14 +38,25 @@ in {
         "catppuccin-mocha"
       '';
     };
+    onChange = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        Shell commands to run when wallpapers have changed between
+        generations. The script will be run
+        *after* the new files have been linked
+        into place.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
     home.file."${cfg.outputPath}" = {
-    recursive = true;
-    source = pkgs.runCommand "cc-wallpapers" {} ''
+      recursive = true;
+      source = pkgs.runCommand "recolored-wallpapers" {} ''
         ${pkgs.lutgen}/bin/lutgen apply ${cfg.wallpapers}/* -p ${cfg.colorscheme} -o $out
-    '';
+      '';
+      onChange = cfg.onChange;
     };
   };
 }
