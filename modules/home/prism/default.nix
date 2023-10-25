@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }: let
   cfg = config.prism;
@@ -11,7 +12,7 @@ in {
       description = ''
         The directory the the wallpapers are outputted to.
       '';
-      type = lib.types.path;
+      type = lib.types.string;
       default = ".config/wallpapers/";
       example = lib.literalExample ''
         .config/wallpapers/
@@ -41,11 +42,10 @@ in {
 
   config = lib.mkIf cfg.enable {
     home.file."${cfg.outputPath}" = {
-        recursive = true;
-        source = cfg.wallpapers;
-        onChange = ''
-           echo test 
-        '';
+    recursive = true;
+    source = pkgs.runCommand "cc-wallpapers" {} ''
+        ${pkgs.lutgen}/bin/lutgen apply ${cfg.wallpapers}/* -p ${cfg.colorscheme} -o $out
+    '';
     };
   };
 }
