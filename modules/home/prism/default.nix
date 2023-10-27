@@ -32,8 +32,9 @@ in {
       description = ''
         The colorscheme to convert the wallpapers into.
         Can be a string like "catppuccin-mocha" or a list of strings containing each hex code to use.
+        It also can be a colorscheme from nix-colors.
       '';
-      type = with lib.types; oneOf [ str (listOf str) ];
+      type = with lib.types; oneOf [str (listOf str) attrs];
       default = "";
     };
     onChange = lib.mkOption {
@@ -53,12 +54,20 @@ in {
       recursive = true;
       source = pkgs.runCommand "recolored-wallpapers" {} ''
         ${pkgs.lutgen}/bin/lutgen apply ${cfg.wallpapers}/* -o $out ${
-          if builtins.isList cfg.colorscheme
-          # This is really dumb but it's the only way i could think to do this.
-          # If cfg.colorscheme is a list we separate it and wrap each one with ''.
-          # We have to put the ' on the outside and then use `' '` to as a separator to make them individual strings.
-          then "-- '${builtins.concatStringsSep "' '" cfg.colorscheme}'" 
-          else "-p ${cfg.colorscheme}" # Builtin colorscheme
+          let
+            # If colorscheme is a attrset, convert to a list.
+            # Otherwise pass colorscheme.
+            scheme =
+              if builtins.isAttrs cfg.colorscheme
+              then lib.attrsets.attrValues cfg.colorscheme.colors
+              else cfg.colorscheme;
+          in
+            if builtins.isList scheme
+            # This is really dumb but it's the only way i could think to do this.
+            # If cfg.colorscheme is a list we separate it and wrap each one with ''.
+            # We have to put the ' on the outside and then use `' '` to as a separator to make them individual strings.
+            then "-- '${builtins.concatStringsSep "' '" scheme}'"
+            else "-p ${scheme}" # Builtin colorscheme
         }
       '';
       onChange = cfg.onChange;
