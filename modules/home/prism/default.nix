@@ -8,7 +8,7 @@
 in {
   options.prism = {
     enable = lib.mkEnableOption "Enable prism";
-    outputPath = lib.mkOption {
+    outPath = lib.mkOption {
       description = ''
         The directory the the wallpapers are outputted to.
       '';
