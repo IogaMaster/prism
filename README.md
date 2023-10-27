@@ -68,12 +68,15 @@ Using the module:
 ```nix
 prism = {
   enabled = true;
-  colorscheme = "catppuccin-mocha"; # The colorsheme to use 
   wallpapers = ./wallpapers; # Path to the wallpapers directory in your config. (IMAGES ONLY)
   outPath = ".config/wallpapers"; # Where in your home directory to output to.
+
+  # This is can be a string, or a list of strings.
+  colorscheme = "catppuccin-mocha"; 
+
+  # Colors are formatted the same as a base16 scheme
+  # colorscheme = [ "FFFFFF" "FAFAFA" ... ]; 
 };
 ```
 
 If you like prism, consider checking out [nix-colors](https://github.com/Misterio77/nix-colors).
-
-
