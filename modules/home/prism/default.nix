@@ -52,24 +52,28 @@ in {
   config = lib.mkIf cfg.enable {
     home.file."${cfg.outPath}" = {
       recursive = true;
-      source = pkgs.runCommand "recolored-wallpapers" {} ''
-        ${pkgs.lutgen}/bin/lutgen apply ${cfg.wallpapers}/* -o $out ${
-          let
-            # If colorscheme is a attrset, convert to a list.
-            # Otherwise pass colorscheme.
-            scheme =
-              if builtins.isAttrs cfg.colorscheme
-              then lib.attrsets.attrValues cfg.colorscheme.colors
-              else cfg.colorscheme;
-          in
-            if builtins.isList scheme
-            # This is really dumb but it's the only way i could think to do this.
-            # If cfg.colorscheme is a list we separate it and wrap each one with ''.
-            # We have to put the ' on the outside and then use `' '` to as a separator to make them individual strings.
-            then "-- '${builtins.concatStringsSep "' '" scheme}'"
-            else "-p ${scheme}" # Builtin colorscheme
-        }
-      '';
+      source = let
+        scheme =
+          if builtins.isAttrs cfg.colorscheme
+          then lib.attrsets.attrValues cfg.colorscheme.colors
+          else cfg.colorscheme;
+        colors =
+          # If colorscheme is a attrset, convert to a list.
+          # Otherwise pass colorscheme.
+          if builtins.isList scheme
+          # This is really dumb but it's the only way i could think to do this.
+          # If cfg.colorscheme is a list we separate it and wrap each one with ''.
+          # We have to put the ' on the outside and then use `' '` to as a separator to make them individual strings.
+          then "-- '${builtins.concatStringsSep "' '" scheme}'"
+          else "-p ${scheme}";
+      in
+        pkgs.runCommand "recolored-wallpapers" {} ''
+            mkdir $out && cd $out
+            for WALLPAPER in $(ls ${cfg.wallpapers}) 
+            do
+              ${pkgs.lutgen}/bin/lutgen apply ${cfg.wallpapers}/$WALLPAPER -o $WALLPAPER ${colors}
+            done
+        '';
       onChange = cfg.onChange;
     };
   };
