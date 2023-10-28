@@ -50,7 +50,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    home.file."${cfg.outputPath}" = {
+    home.file."${cfg.outPath}" = {
       recursive = true;
       source = pkgs.runCommand "recolored-wallpapers" {} ''
         ${pkgs.lutgen}/bin/lutgen apply ${cfg.wallpapers}/* -o $out ${
