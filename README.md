@@ -12,8 +12,7 @@
     </a>
     <a href="https://github.com/Iogamaster/prism/stargazers">
         <img src="https://img.shields.io/github/stars/Iogamaster/prism?color=ca9ee6&labelColor=303446&style=for-the-badge">
-    </a>
-    <a href="https://github.com/Iogamaster/prism">
+    </a> <a href="https://github.com/Iogamaster/prism">
         <img src="https://img.shields.io/github/repo-size/Iogamaster/prism?color=ea999c&labelColor=303446&style=for-the-badge">
     </a>
     <a href="https://github.com/Iogamaster/prism/blob/main/.github/LICENCE">
@@ -67,7 +66,7 @@ To use `Gruvbox Dark` you need to specify `colorscheme = "gruvbox-dark";`
 Using the module:
 ```nix
 prism = {
-  enabled = true;
+  enable = true;
   wallpapers = ./wallpapers; # Path to the wallpapers directory in your config. (IMAGES ONLY)
   outPath = ".config/wallpapers"; # Where in your home directory to output to.
 
