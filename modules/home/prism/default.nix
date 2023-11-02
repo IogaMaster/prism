@@ -74,7 +74,7 @@ in {
               ${pkgs.lutgen}/bin/lutgen apply ${cfg.wallpapers}/$WALLPAPER -o $WALLPAPER ${colors}
             done
         '';
-      onChange = cfg.onChange;
+      inherit (cfg) onChange;
     };
   };
 }
