@@ -40,11 +40,6 @@
 
 ## Usage
 
-> \[!WARNING\]\
-> Images that are already in the colorscheme specified are changed to be more muted.
-> 
-> I am addressing this [here](https://github.com/ozwaldorf/lutgen-rs/issues/12)
-
 > \[!NOTE\]\
 > If you add or remove an image from the wallpapers path, ALL wallpapers will be rebuilt.
 >
