@@ -67,11 +67,11 @@ in {
           then "-- '${builtins.concatStringsSep "' '" scheme}'"
           else "-p ${scheme}";
       in
-        pkgs.runCommand "recolored-wallpapers" {} ''
-            mkdir $out && cd $out
-            for WALLPAPER in $(ls ${cfg.wallpapers}) 
+        pkgs.runCommand "prism" {} ''
+            mkdir $out
+            for WALLPAPER in $(find ${cfg.wallpapers} -type f) 
             do
-              ${pkgs.lutgen}/bin/lutgen apply ${cfg.wallpapers}/$WALLPAPER -o $WALLPAPER ${colors}
+              ${pkgs.lutgen}/bin/lutgen apply $WALLPAPER -o $out/$(basename $WALLPAPER) ${colors}
             done
         '';
       inherit (cfg) onChange;
