@@ -55,7 +55,7 @@ in {
       source = let
         scheme =
           if builtins.isAttrs cfg.colorscheme
-          then lib.attrsets.attrValues cfg.colorscheme.colors
+          then lib.attrsets.attrValues cfg.colorscheme.palette
           else cfg.colorscheme;
         colors =
           # If colorscheme is a attrset, convert to a list.
