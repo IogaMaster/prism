@@ -71,7 +71,7 @@ in {
             mkdir $out
             for WALLPAPER in $(find ${cfg.wallpapers} -type f) 
             do
-              ${pkgs.lutgen}/bin/lutgen apply $WALLPAPER -o $out/$(basename $WALLPAPER) ${colors}
+              xargs -0 -P $(nproc) -I % ${pkgs.lutgen}/bin/lutgen apply $WALLPAPER -o $out/$(basename $WALLPAPER) ${colors} %
             done
         '';
       inherit (cfg) onChange;
