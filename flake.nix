@@ -17,5 +17,8 @@
       inherit inputs;
 
       src = ./.;
+    } //
+    {
+      nixosModules.hjem = ./modules/hjem/prism/default.nix;
     };
 }
